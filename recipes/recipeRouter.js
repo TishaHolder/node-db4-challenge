@@ -21,12 +21,14 @@ recipeRouter.get('/', (req, res) => {
     
 })
 
-recipeRouter.get('/:id', (req, res) => {
+recipeRouter.get('/:id', validateRecipeId, (req, res) => {
 
     const { id } = req.params;
 
     recipeDB.getRecipesById(id)
     .then(recipe => {
+
+
         res.status(200).json(recipe);
 
     })
@@ -36,7 +38,7 @@ recipeRouter.get('/:id', (req, res) => {
 
 })
 
-recipeRouter.get('/:id/shoppinglist', (req, res) => {
+recipeRouter.get('/:id/shoppinglist', validateRecipeId, (req, res) => {
 
     const { id } = req.params;
 
@@ -52,7 +54,7 @@ recipeRouter.get('/:id/shoppinglist', (req, res) => {
 
 })
 
-recipeRouter.get('/:id/instructions', (req, res) => {
+recipeRouter.get('/:id/instructions', validateRecipeId, (req, res) => {
 
     const { id } = req.params;
 
@@ -67,6 +69,23 @@ recipeRouter.get('/:id/instructions', (req, res) => {
 
 })
 
+//custom/local middleware
+function validateRecipeId(req, res, next){
+
+    const {id} = req.params;
+
+    recipeDB.getRecipesById(id)
+    .then(recipe => {
+        if(recipe){
+            next();
+        }
+        else {
+            res.status(404).json( {message: 'A recipe with that id does not exist.'} );
+        }
+    })
+    
+
+};
 
 //export router
 module.exports = recipeRouter;
