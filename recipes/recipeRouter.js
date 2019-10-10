@@ -38,9 +38,32 @@ recipeRouter.get('/:id', (req, res) => {
 
 recipeRouter.get('/:id/shoppinglist', (req, res) => {
 
+    const { id } = req.params;
+
+    recipeDB.getShoppingList(id)
+    .then(shoppingList => {
+        res.status(200).json(shoppingList);
+    })
+    .catch(error => {
+        console.log("shopping list error", error);
+        res.status(500).json({ error: 'There was an error retrieving the shopping list from the database.'});
+    })
+
+
 })
 
 recipeRouter.get('/:id/instructions', (req, res) => {
+
+    const { id } = req.params;
+
+    recipeDB.getInstructions(id)
+    .then(instructions => {
+        res.status(200).json(instructions);
+    })
+    .catch(error => {
+        console.log("instructions error", error);
+        res.status(500).json({ error: 'There was an error retrieving the instructions from the database.'});
+    })
 
 })
 
