@@ -32,6 +32,7 @@ module.exports = {
     afterCreate: (conn, done) => {
      //runs after a connection is made to the sqlite engine
      //turn on FK enforcement
+     //enforces foreign key constraints on SQLite, not needed for other DBMSs
      conn.run('PRAGMA foreign_keys = ON', done);    
     },
   } 

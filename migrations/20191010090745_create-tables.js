@@ -31,12 +31,15 @@ exports.up = function(knex) {
   //RECIPE_INGREDIENTS TABLE
   .createTable('recipe_ingredients', tbl => {
 
+      tbl.increments(); //primary key
+
       //foreign key - part of composite key
       tbl.integer('recipe_id')
       .unsigned()
       .notNullable()
       .references('id')
       .inTable('recipes') //this table must exist already
+      //can use .onUpdate('RESTRICT') 'RESTRICT' which will verify if you want to delete all associated records      
       .onUpdate('CASCADE') //updating a pk record updates all associated records
       .onDelete('CASCADE'); //deleteing a pk record deletes all associated records
 
@@ -56,7 +59,7 @@ exports.up = function(knex) {
       
       //the combination of the two keys becomes our primary key
       //will enforce unique combination of keys
-      tbl.primary(['recipe_id', 'ingredient_id']); 
+      tbl.unique(['recipe_id', 'ingredient_id']); 
 
   })
 
@@ -70,7 +73,7 @@ exports.up = function(knex) {
       .notNullable();
 
       //instructions field
-      tbl.string('instructions', 255)
+      tbl.text('instructions')
       .notNullable();
 
       //foreign key

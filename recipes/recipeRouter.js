@@ -10,7 +10,30 @@ const recipeDB = require('./recipeModel.js');
 /***********************************END POINTS*****************************/
 
 recipeRouter.get('/', (req, res) => {
-    res.send(<h1>Hellooooooooooo</h1>);
+
+    recipeDB.getRecipes()
+    .then(recipes => {
+        res.status(200).json(recipes);
+    })
+    .catch(error => {
+        res.status(500).json({ error: 'There was an error retrieving the recipes from the database.'});
+    })
+    
+})
+
+recipeRouter.get('/:id', (req, res) => {
+
+    const { id } = req.params;
+
+    recipeDB.getRecipesById(id)
+    .then(recipe => {
+        res.status(200).json(recipe);
+
+    })
+    .catch(error => {
+        res.status(500).json({ error: 'There was an error retrieving the recipe from the database.'});
+    })
+
 })
 
 recipeRouter.get('/:id/shoppinglist', (req, res) => {

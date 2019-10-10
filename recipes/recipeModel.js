@@ -8,20 +8,27 @@ const db = require('../data/dbConfig.js');
 
 //export CRUD methods
 module.exports = {
-    findRecipes,
-    findShoppingList,
-    findInstructions
+    getRecipes,
+    getRecipesById,
+    getShoppingList,
+    getInstructions
 
 };
 
 
 //methods to perform CRUD operations
-function findRecipes(){
+function getRecipes(){
     return db('recipes');
 
 }
 
-function findShoppingList(id){
+function getRecipesById(id){
+    return db('recipes')
+    .where({ 'recipes.id': id})
+    .first();
+}
+
+function getShoppingList(id){
     return db('recipes')
     .join('recipe_ingredients', 'recipes.id', '=', ['recipe_ingredients.recipe_id', 'recipe_ingredients.ingredient_id'])
     .join('ingredients', 'ingredients.id', '=', ['recipe_ingredients.recipe_id', 'recipe_ingredients.ingredient_id'])
@@ -31,7 +38,7 @@ function findShoppingList(id){
 
 }
 
-function findInstructions(id){
+function getInstructions(id){
     return db('recipes')
     .join('instructions', 'recipes.id', '=', 'instructions.recipe_id')
     .where({ 'recipes.id': id })
